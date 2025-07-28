@@ -14,6 +14,7 @@ export function AppRoutes() {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<LoginPage/>} />
                 <Route path="/form" element={<FormPage/>} />
                 <Route path="/login" element={<LoginPage/>} />
                 <Route path="/list" element={<OpportunitiesListPage/>} />

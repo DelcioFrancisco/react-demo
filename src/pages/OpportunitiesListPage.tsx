@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 interface Opportunity {
   id: number;
@@ -10,6 +12,7 @@ interface Opportunity {
 
 const OpportunitiesListPage: React.FC = () => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const navigate = useNavigate();
 
 useEffect(() => {
   const fetchOpportunities = async () => {
@@ -32,9 +35,16 @@ useEffect(() => {
   fetchOpportunities();
 }, []);
 
+const openFrom = () => {
+  navigate('/form');
+}
+
   return (
     <div style={styles.container}>
-      <h2>Opportunities</h2>
+      <header style={styles.head}>
+        <div><h2>Opportunities</h2></div>
+        <div><button onClick={openFrom}>ADD+</button></div>
+      </header>      
       {opportunities.length === 0 ? (
         <p>No opportunities found.</p>
       ) : (
@@ -83,6 +93,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '8px',
     borderBottom: '1px solid #eee',
   },
+  head: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }
+
 };
 
 export default OpportunitiesListPage;
