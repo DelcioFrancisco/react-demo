@@ -1,19 +1,47 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface OpportunityFormData {
-  name_company: string;
+  nameCompany: string;
   description: string;
-  value_company: number | '';
+  valueCompany: number | '';
 }
 
 const FormPage: React.FC = () => {
   const [formData, setFormData] = useState<OpportunityFormData>({
-    name_company: '',
+    nameCompany: '',
     description: '',
-    value_company: '',
+    valueCompany: '',
   });
 
   const [message, setMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const addOpportunity = async () => {
+    try {
+    const response = await axios.post<any>(
+        'http://localhost:8080/opportunities',
+{
+	nameCompany: "Zeiss",
+  description: "Empresa de TI em GER 👓",
+  valueCompany: 999.000
+},
+  {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+    );
+
+    setLogin(response.data);
+    console.log(`Token: ${response.data.token}`);
+    navigate('/token');
+  } catch (error) {
+    console.error('Failed to fetch token:', error);
+    setError('Login failed. Please try again.');
+  }
+  } 
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -30,7 +58,7 @@ const FormPage: React.FC = () => {
     e.preventDefault();
     setMessage(null);
 
-    if (!formData.name_company || !formData.description) {
+    if (!formData.nameCompany || !formData.description) {
       setMessage('Please fill in all required fields.');
       return;
     }
@@ -39,10 +67,12 @@ const FormPage: React.FC = () => {
     setMessage('Opportunity submitted successfully.');
 
     setFormData({
-      name_company: '',
+      nameCompany: '',
       description: '',
-      value_company: '',
+      valueCompany: '',
     });
+
+    navigate('/list');
   };
 
   return (
@@ -53,7 +83,7 @@ const FormPage: React.FC = () => {
           type="text"
           name="name_company"
           placeholder="Company Name"
-          value={formData.name_company}
+          value={formData.nameCompany}
           onChange={handleChange}
           style={styles.input}
           required
@@ -70,7 +100,7 @@ const FormPage: React.FC = () => {
           type="number"
           name="value_company"
           placeholder="Value (e.g. 1000.00)"
-          value={formData.value_company}
+          value={formData.valueCompany}
           onChange={handleChange}
           style={styles.input}
           step="0.01"
