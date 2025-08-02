@@ -64,6 +64,7 @@ const openFrom = () => {
                 <td>{opp.nameCompany}</td>
                 <td>{opp.description}</td>
                 <td>${opp.valueCampany?.toFixed(2)}</td>
+                <td><button>DELETE</button></td>
               </tr>
             ))}
           </tbody>

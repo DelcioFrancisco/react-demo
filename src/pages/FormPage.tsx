@@ -23,23 +23,22 @@ const FormPage: React.FC = () => {
     const response = await axios.post<any>(
         'http://localhost:8080/opportunities',
 {
-	nameCompany: "Zeiss",
-  description: "Empresa de TI em GER 👓",
-  valueCompany: 999.000
+	nameCompany: formData.nameCompany,
+  description: formData.description,
+  valueCompany: formData.valueCompany
 },
   {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `${localStorage.getItem('accessToken')}`
     }
   }
     );
-
-    setLogin(response.data);
-    console.log(`Token: ${response.data.token}`);
-    navigate('/token');
+    //setLogin(response.data);
+    navigate('/list');
   } catch (error) {
     console.error('Failed to fetch token:', error);
-    setError('Login failed. Please try again.');
+    //setError('Login failed. Please try again.');
   }
   } 
 
@@ -64,6 +63,7 @@ const FormPage: React.FC = () => {
     }
 
     console.log('Submitted opportunity:', formData);
+    addOpportunity();
     setMessage('Opportunity submitted successfully.');
 
     setFormData({
@@ -81,7 +81,7 @@ const FormPage: React.FC = () => {
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
-          name="name_company"
+          name="nameCompany"
           placeholder="Company Name"
           value={formData.nameCompany}
           onChange={handleChange}
@@ -98,7 +98,7 @@ const FormPage: React.FC = () => {
         />
         <input
           type="number"
-          name="value_company"
+          name="valueCompany"
           placeholder="Value (e.g. 1000.00)"
           value={formData.valueCompany}
           onChange={handleChange}
